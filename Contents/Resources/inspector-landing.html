@@ -1,0 +1,61 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>Getting Started with the Standalone Web Inspector</title>
+
+<style>
+body{background:transparent;display:table-cell; padding:0 2ex;}
+html{background:#E8E8E8; color:#555; border-top:1px solid #8A8A8A;}
+html,body,input{font-family:"Lucida Grande"; font-size:12px;}
+script[type] {
+  display: block;
+  white-space: pre;
+  font-family: menlo, monospace;
+  font-size: 1;
+  background: #00A;
+  color: #AAF;
+  padding: 1ex;
+  display:inline-block; vertical-align:middle;
+  
+  -webkit-box-shadow:
+    inset #005 1px 1px 10px,
+    #AAF 0 0 10px
+  ;
+}
+script[type]::before{content:"$ "; color:white;}
+script[type]::selection{background-color:#AAF; color:#FFF;}
+</style>
+
+<h1>This app connects to a WebSocket server</h1>
+<p>The easiest way to start a websocket server is to launch Google Chrome with the <code>remote-debugging-port</code> flag.
+  <em>Like this…</em>
+
+<p>
+
+<script type="application/x-sh">open -a "Google Chrome" --args --remote-debugging-port=9222</script>
+
+Or
+
+<script type="application/x-sh">open -a "Google Chrome Canary" --args \
+  --remote-debugging-port=9222 \
+  --user-data-dir="$HOME/.chrome-user-data" \
+  "http://twitter.com/subtleGradient"</script>
+
+<small>
+<ul>
+<li>Use Chrome Canary to be sure you have the latest and greatest epic hotness.
+<li>Use the <code>--user-data-dir=whatever</code> flag<br> so that Chrome will keep its preferences and bookmarks and stuff separate from your personal uaage of Chrome.
+<li>The last argument is a URL to open.
+<li>The <a href="http://peter.sh/experiments/chromium-command-line-switches/" title="List of Chromium Command Line Switches &laquo;  Peter Beverloo">list of available flags is available here</a>
+<li>To have Chrome use the same devtools frontend that this app uses, use the flag<br> <code>--debug-devtools-frontend="<script>document.write(decodeURIComponent(top.location.search.match(/devtools=([^&]*)/)[1]))</script>"</code>
+</ul>
+</small>
+
+<p>Many other browsers and devices include WebSocket urls that this app can connect to.
+
+<hr>
+
+<h3>Get the list of available pages</h3>
+
+<p><script type="application/x-sh">curl -s "http://localhost:9222/json" \
+  | grep webSocketDebuggerUrl \
+  | cut -d'"' -f4</script>

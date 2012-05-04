@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>Standalone Remote Web Inspector Tabs</title>
+<style>
+body{background:transparent;}
+html{background:#E8E8E8; color:#555; border-top:1px solid #8A8A8A;}
+html,body,input{font-family:"Lucida Grande"; font-size:12px;}
+
+.tab:empty::before{content: attr(value)}
+form{display:inline-block}
+
+</style>
+<script>
+
+top.inspectorFrame.onload = function(){
+  
+  top.inspector.onload = function(){
+    console.log('lulz')
+  }
+  setTimeout(function(){
+    top.document.title = top.inspector.document.title
+    console.log('onload', top.inspector.document.title)
+  }, 1000);
+}
+
+// This is only necessary because the devtools can't handle url encoded values. Yes, lol n00bz.
+function submitForm(form){
+  var location = form.action
+  for (var i=0; i < form.length; i++) with(form[i]) {
+    if (name == 'ws') value = value.replace(/^ws:\/*/,'')
+    location += (i? '&' : '?') + name + '=' + value
+  }
+  top[form.target].location = location
+}
+
+</script>
+
+<form id=inspectorForm target=inspector action onsubmit="submitForm(this); return false">
+  <label>ws://<input name=ws value="localhost:9222/devtools/page/3_1" size=64 autofocus></label>
+  <label><input type=checkbox name=experiments value=true checked> Enable experiments</label>
+  <input type="submit" value="Inspect">
+</form>
+
+<script>inspectorForm.action = decodeURIComponent(top.location.search.match(/devtools=([^&]*)/)[1])</script>
